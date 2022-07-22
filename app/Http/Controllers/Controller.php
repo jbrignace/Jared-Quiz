@@ -32,13 +32,11 @@ class Controller extends BaseController
 
 
     }
-     public function check_answer()
+    public function check_answer()
     {
         $data['wrong'] = 'n';
         $num_rows = Question::count();
-        if($_POST['question_number'] >= $num_rows) {
-            return view('complete');
-        }
+
         $answer = Question::correct_answer($_POST['question_number']);
         $id = $_POST['question_number'];
         if($answer[0]->answer == $_POST['answer']) {
@@ -46,6 +44,9 @@ class Controller extends BaseController
         } else {
             $data['wrong'] = 'y';
             $data['incorrect_answer'] = $_POST['answer'];
+        }
+        if($_POST['question_number'] >= $num_rows && $data['wrong'] == 'n') {
+            return view('complete');
         }
         $question = Question::get_question_by_id($id);
         $data['question'] = $question[0]->question;
